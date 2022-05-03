@@ -1,4 +1,8 @@
-venv/
+*.pyc
+.DS_Store
 .env
+venv
+__pycache__/
+_updated/
 *.h5
 static/uploads/**
