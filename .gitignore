@@ -1,2 +1,4 @@
 venv/
 .env
+*.h5
+static/uploads/**
