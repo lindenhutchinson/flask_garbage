@@ -1,4 +1,4 @@
-from flask import render_template, current_app as app, request, url_for, flash, abort
+from flask import render_template, current_app as app, request, url_for, flash, abort, make_response, jsonify
 import numpy as np
 from tensorflow.keras.preprocessing import image
 from keras.preprocessing.image import load_img
@@ -11,6 +11,7 @@ import os
 import uuid
 from model_utils import get_model
 
+
 def validate_image(stream):
     header = stream.read(512)
     stream.seek(0)
@@ -19,10 +20,13 @@ def validate_image(stream):
         return None
     return '.' + (format if format != 'jpeg' else 'jpg')
 
+# ajax route for uploading a file and returning model predictions
+
+
 def make_prediction():
     if 'image_file' not in request.files:
-        abort(400)
-    
+        abort(400)  # will need to handle errors somehow... (not like this!)
+
     uploaded_file = request.files['image_file']
     filename = secure_filename(uploaded_file.filename)
     if filename != '':
@@ -30,21 +34,23 @@ def make_prediction():
         if file_ext != validate_image(uploaded_file.stream):
             abort(400)
 
-
     new_filename = str(uuid.uuid4())
-    file_path = os.path.join(app.config['UPLOAD_PATH'], f"{new_filename}.{file_ext}")
+    file_path = os.path.join(
+        app.config['UPLOAD_PATH'], f"{new_filename}.{file_ext}")
     uploaded_file.save(file_path)
 
-    prediction = '',
-    predictions = []
+    prediction = 'toast',
+    predictions = {'toast':0.5}
 
     if app.config['USE_MODEL']:
         image = load_image(file_path)
         prediction, predictions = predict_image(image)
 
-    flash('Image processed successfully!', 'success')
-
-    return render_template('pages/view.html', image_prediction=prediction, user_image=file_path, predictions=predictions)
+    resp = jsonify(
+        prediction=prediction,
+        predictions=predictions
+    )
+    return make_response(resp, 200)
 
 
 def load_image(img_path):
@@ -66,8 +72,7 @@ def predict_image(image):
     model = get_model()
     categories = app.config['CATEGORIES']
     pred = model.predict(image)
-    predictions = {categories[i]: round(prediction, 2) for i, prediction in enumerate(pred[0]) if prediction > 0.2}
+    predictions = {categories[i]: round(
+        prediction, 2) for i, prediction in enumerate(pred[0]) if prediction > 0.2}
 
     return(categories[np.argmax(pred, axis=1)[0]], predictions)
-
-

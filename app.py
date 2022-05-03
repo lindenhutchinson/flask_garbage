@@ -3,7 +3,6 @@ import logging
 from logging import Formatter, FileHandler
 
 # extensions
-from flask_bootstrap import Bootstrap
 from routes import routes
 from model_utils import instantiate_model
 
@@ -36,7 +35,6 @@ def register_extensions(app):
     """
 
     routes(app)
-    bootstrap = Bootstrap(app)
     with app.app_context():
         global model
         instantiate_model()

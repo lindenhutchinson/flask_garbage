@@ -1,5 +1,7 @@
 from dotenv import load_dotenv
 import os
+from distutils.util import strtobool
+
 load_dotenv()
 
 class Config(object):
@@ -15,7 +17,8 @@ class Config(object):
     IMAGE_SIZE=200
     MAX_CONTENT_LENGTH = 2 * 2048 * 2048
     UPLOAD_EXTENSIONS = ['.jpg', '.png']
-    USE_MODEL = False
+    USE_MODEL = strtobool(os.getenv('USE_MODEL', True))
+
     CATEGORIES = []
 
 
@@ -28,7 +31,7 @@ class DevelopmentConfig(Config):
     FLASK_APP = 'APP-DEV'
     SECRET_KEY = os.getenv('SECRET_KEY')
     PORT = os.getenv('PORT', 8069)
-    USE_MODEL = True
+    USE_MODEL = strtobool(os.getenv('USE_MODEL', True))
     MODEL_FILE = 'inception_resnetv2_garbage_4.h5'
     CATEGORIES = [
         'cardboard',

@@ -1,7 +1,7 @@
 from flask import render_template
 
 def home():
-    return render_template('pages/view.html')
+    return render_template('pages/home.html')
 
 def about():
     return render_template('pages/placeholder.about.html')
