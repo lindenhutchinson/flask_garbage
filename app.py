@@ -1,68 +1,42 @@
-#----------------------------------------------------------------------------#
-# Imports
-#----------------------------------------------------------------------------#
-
-from flask import Flask, render_template, request
+from flask import Flask
 import logging
 from logging import Formatter, FileHandler
-from forms import *
-import os
 
-#----------------------------------------------------------------------------#
-# App Config.
-#----------------------------------------------------------------------------#
+# extensions
+from flask_bootstrap import Bootstrap
+from routes import routes
+from model_utils import instantiate_model
 
-app = Flask(__name__)
-app.config.from_object('config')
+def create_app(config):
+    app = Flask(__name__)
+    app.config.from_object(config)
+        
+    if not app.debug:
+        file_handler = FileHandler('error.log')
+        file_handler.setFormatter(
+            Formatter(
+                '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
+        )
+        app.logger.setLevel(logging.INFO)
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+        app.logger.info('errors')
 
+    return app
 
-#----------------------------------------------------------------------------#
-# Controllers.
-#----------------------------------------------------------------------------#
+def register_extensions(app):
+    """Register all Extensions
+    This registers all the add-ons of the app,
+    to be instantiated with the instance of the flask app
+    Add your extensions to this functions e.g Mail
 
+    :param app: Flask app instance
+    :return: None
+    :rtype: NoneType
+    """
 
-@app.route('/')
-def home():
-    return render_template('pages/placeholder.home.html')
-
-
-@app.route('/about')
-def about():
-    return render_template('pages/placeholder.about.html')
-
-
-# Error handlers.
-@app.errorhandler(500)
-def internal_error(error):
-    #db_session.rollback()
-    return render_template('errors/500.html'), 500
-
-
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('errors/404.html'), 404
-
-if not app.debug:
-    file_handler = FileHandler('error.log')
-    file_handler.setFormatter(
-        Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
-    )
-    app.logger.setLevel(logging.INFO)
-    file_handler.setLevel(logging.INFO)
-    app.logger.addHandler(file_handler)
-    app.logger.info('errors')
-
-#----------------------------------------------------------------------------#
-# Launch.
-#----------------------------------------------------------------------------#
-
-# Default port:
-if __name__ == '__main__':
-    app.run()
-
-# Or specify port manually:
-'''
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-'''
+    routes(app)
+    bootstrap = Bootstrap(app)
+    with app.app_context():
+        global model
+        instantiate_model()

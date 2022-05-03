@@ -5,3 +5,4 @@ venv
 __pycache__/
 _updated/
 *.h5
+static/uploads/**

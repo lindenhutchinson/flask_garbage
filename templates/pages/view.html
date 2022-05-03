@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Python Flask & Bootstrap 4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <html>
+      <div class="jumbotron text-center" style="margin-bottom: 0">
+        Garbage Image Predictions
+      </div>
+      <div class="row mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+        {% if messages %} {% for category, message in messages %}
+        <div class="col-md-8 offset-md-2 alert alert-{{ category }} alert-dismissible" role="alert">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{ message }}
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+      </div>
+      <div class="container" style="margin-top: 30px">
+        <div class="row">
+          {% if user_image %}
+          <img
+            src="{{ user_image }}"
+            alt="User Image"
+            width="150"
+            height="150"
+          />
+          {% endif %}
+        </div>
+        <div class="row">
+          {% if predictions %} {% for cat, pred in predictions.items() %}
+          {{cat}}:{{pred}} {% endfor %} {% endif %}
+        </div>
+        <div class="row">
+          {% if image_prediction %}
+          <h2>{{image_prediction}}</h2>
+          {% endif %}
+        </div>
+        <div class="row">
+          <form method="post" enctype="multipart/form-data" action="{{url_for('make_prediction')}}">
+            <input type="file" name="image_file" />
+            <input type="submit" />
+          </form>
+        </div>
+      </div>
+    </html>
+  </head>
+</html>
