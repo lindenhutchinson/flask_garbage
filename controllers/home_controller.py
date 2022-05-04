@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, make_response, jsonify
 
 def home():
     return render_template('pages/home.html')
@@ -13,7 +13,7 @@ def not_found_error(error):
     return render_template('errors/404.html'), 404
 
 def image_too_large_error(error):
-    return "file is too large", 413
+    return make_response(jsonify(error_text="Sorry I can't handle files that large, please try again with a smaller file"), 413)
 
 def bad_request_error(error):
-    return "Bad request", 400
+    return make_response(jsonify(error_text="Please upload a valid image file"), 400)
