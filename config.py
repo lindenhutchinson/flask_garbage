@@ -4,6 +4,7 @@ from distutils.util import strtobool
 
 load_dotenv()
 
+
 class Config(object):
     """Config base class
     This is the default configuration class for your app. You should
@@ -13,8 +14,8 @@ class Config(object):
     DEBUG = False
     TESTING = False
     ENV = 'development'
-    UPLOAD_PATH='static/uploads/'
-    IMAGE_SIZE=200
+    UPLOAD_PATH = 'static/uploads/'
+    IMAGE_SIZE = 200
     MAX_CONTENT_LENGTH = 4 * 2048 * 2048
     UPLOAD_EXTENSIONS = ['.jpg', '.png']
     USE_MODEL = strtobool(os.getenv('USE_MODEL', 'True'))
@@ -69,4 +70,17 @@ class ProductionConfig(Config):
 
        """
     ENV = 'production'
-
+    DEBUG = False
+    FLASK_APP = 'APP-DEV'
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    PORT = os.getenv('PORT', 8069)
+    USE_MODEL = strtobool(os.getenv('USE_MODEL', 'True'))
+    MODEL_FILE = 'model_v_1'
+    CATEGORIES = [
+        'cardboard',
+        'glass',
+        'metal',
+        'paper',
+        'plastic',
+        'trash'
+    ]
