@@ -21,6 +21,23 @@ def validate_image(stream):
     return '.' + (img_format if img_format != 'jpeg' else 'jpg')
 
 
+def report_model_prediction():
+    json_data = request.get_json()
+
+    if not 'correct' in json_data or not 'filepath' in json_data:
+        abort(400)
+
+    filename = os.path.split(json_data['filepath'])[-1]
+    new_filepath = os.path.join(f'static/reported_images/{"good" if json_data["correct"] else "bad"}', filename)
+    potential_filepath = os.path.join(f'static/reported_images/{"bad" if json_data["correct"] else "good"}', filename)
+        
+    if not os.path.exists(new_filepath) and not os.path.exists(potential_filepath):
+        os.rename(json_data['filepath'], new_filepath)
+
+        return make_response(jsonify(msg='Thank you for the feedback'), 200)
+
+    return make_response(jsonify(msg='You have already given feedback for this image'), 200)
+
 # ajax route for uploading a file and returning model predictions
 def make_prediction():
     if 'image_file' not in request.files or not request.files['image_file']:
@@ -34,8 +51,7 @@ def make_prediction():
             abort(400)
 
     new_filename = str(uuid.uuid4())
-    file_path = os.path.join(
-        app.config['UPLOAD_PATH'], f"{new_filename}.{file_ext}")
+    file_path = app.config['UPLOAD_PATH'] + new_filename + file_ext
     uploaded_file.save(file_path)
 
     prediction = 'toast'

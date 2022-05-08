@@ -26,3 +26,4 @@ def routes(app):
     #----------------------------------------------------------------------------#
 
     app.add_url_rule('/predict-image', view_func=prediction_controller.make_prediction, methods=['POST'])
+    app.add_url_rule('/report-prediction', view_func=prediction_controller.report_model_prediction, methods=['POST'])

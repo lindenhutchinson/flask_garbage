@@ -13,7 +13,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     ENV = 'development'
-    UPLOAD_PATH='static/uploads'
+    UPLOAD_PATH='static/uploads/'
     IMAGE_SIZE=200
     MAX_CONTENT_LENGTH = 4 * 2048 * 2048
     UPLOAD_EXTENSIONS = ['.jpg', '.png']

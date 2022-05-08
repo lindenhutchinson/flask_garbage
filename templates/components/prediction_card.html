@@ -1,18 +1,12 @@
 {% if prediction and predictions and image_path %}
 <div id="uploaded-file-card" class="">
-  <img
-    class="rounded"
-    src="{{ image_path }}"
-    alt="Uploaded Image"
-    width="200"
-    height="200"
-  />
+  <img class="rounded" src="{{ image_path }}" alt="Uploaded Image" width="200" height="200" />
   <div class="mt-3">
     <h5 class="">This looks like {{prediction}}</h5>
     {% if predictions|length > 1 %}
     <p>I also have some other guesses</p>
     <ul>
-      {% for category,probability in predictions %} 
+      {% for category,probability in predictions %}
       {% if category != prediction %}
       <li>{{category}} : {{probability}}%</li>
       {% endif %} {% endfor %}
@@ -25,13 +19,47 @@
       </div>
       <div class="col d-inline-flex">
         <span>
-          <button class="btn btn-success">Yes</button>
+          <button type="button" id="good-prediction" class="btn btn-success">Yes</button>
         </span>
         <span>
-          <button class="ml-3 btn btn-danger">No</button>
+          <button type="button" id="bad-prediction" class="ml-3 btn btn-danger">No</button>
         </span>
       </div>
     </div>
   </div>
 </div>
 {% endif %}
+
+<script>
+
+  function report_prediction(report) {
+    $.ajax({
+      type: "POST",
+      url: "{{url_for('report_model_prediction')}}",
+      contentType: "application/json",
+      data: JSON.stringify({
+        correct: report,
+        filepath: '{{image_path}}'
+      }),
+
+      cache: false,
+      success: function (data) {
+        alert(data.msg);
+      },
+      error: function (data) {
+        console.log("error reporting prediction");
+      },
+    });
+  }
+  $(function () {
+    $("#bad-prediction").click(function () {
+      report_prediction(false);
+    });
+  });
+  $(function () {
+    $("#good-prediction").click(function () {
+      report_prediction(true);
+    });
+  });
+
+</script>
