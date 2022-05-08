@@ -31,7 +31,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     FLASK_APP = 'APP-DEV'
     SECRET_KEY = os.getenv('SECRET_KEY')
-    PORT = os.getenv('PORT', 8069)
+    PORT = os.getenv('PORT', 8000)
     USE_MODEL = strtobool(os.getenv('USE_MODEL', 'True'))
     MODEL_FILE = 'model_v_1'
     CATEGORIES = [
@@ -73,7 +73,7 @@ class ProductionConfig(Config):
     DEBUG = False
     FLASK_APP = 'APP-DEV'
     SECRET_KEY = os.getenv('SECRET_KEY')
-    PORT = os.getenv('PORT', 8069)
+    PORT = os.getenv('PORT', 8000)
     USE_MODEL = strtobool(os.getenv('USE_MODEL', 'True'))
     MODEL_FILE = 'model_v_1'
     CATEGORIES = [
