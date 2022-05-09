@@ -75,7 +75,7 @@ class ProductionConfig(Config):
     SECRET_KEY = os.getenv('SECRET_KEY')
     PORT = os.getenv('PORT', 8000)
     USE_MODEL = strtobool(os.getenv('USE_MODEL', 'True'))
-    MODEL_FILE = 'model_v_1'
+    MODEL_FILE = 'inception_resnetv2_garbage_4.h5'
     CATEGORIES = [
         'cardboard',
         'glass',

@@ -4,7 +4,6 @@
 venv
 __pycache__/
 _updated/
-*.h5
 static/uploads/**
 static/reported_images/good/**
 static/reported_images/bad/**
