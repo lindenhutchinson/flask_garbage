@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 import os
 import uuid
 from model_utils import get_model
-
+from suggestions import Suggestions
 
 def validate_image(stream):
     header = stream.read(512)
@@ -61,8 +61,10 @@ def make_prediction():
         image = load_image(file_path)
         prediction, predictions = predict_image(image)
 
+    text, link = get_suggestions(prediction)
+
     predictions = sorted(predictions.items(), key=lambda x:x[1], reverse=True)
-    return jsonify(html=render_template('components/prediction_card.html', prediction=prediction, predictions=predictions, image_path=file_path))
+    return jsonify(html=render_template('components/prediction_card.html', predictions=predictions, image_path=file_path, text=text, link=link))
 
 
 def load_image(img_path):
@@ -88,3 +90,16 @@ def predict_image(image):
         categories[i]: int(prediction*100) for i, prediction in enumerate(pred[0]) if prediction > 0.2
     }
     return(categories[np.argmax(pred, axis=1)[0]], predictions)
+
+def get_suggestions(image_class):
+    switch = {
+        'cardboard':Suggestions.cardboard(),
+        'e-waste':Suggestions.ewaste(),
+        'glass':Suggestions.glass(),
+        'metal':Suggestions.metal(),
+        'paper':Suggestions.paper(),
+        'plastic':Suggestions.plastic(),
+        'trash':Suggestions.trash()
+    }
+
+    return switch[image_class]

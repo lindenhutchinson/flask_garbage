@@ -1,9 +1,9 @@
 *.pyc
 .DS_Store
-
+.env
 venv
 __pycache__/
-_updated/
 static/uploads/**
 static/reported_images/good/**
 static/reported_images/bad/**
+*.h5

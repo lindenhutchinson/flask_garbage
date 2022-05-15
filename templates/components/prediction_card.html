@@ -1,15 +1,17 @@
-{% if prediction and predictions and image_path %}
-<div id="uploaded-file-card" class="">
+{% if predictions and image_path %}
+<div id="uploaded-file-card">
   <img class="rounded" src="{{ image_path }}" alt="Uploaded Image" width="200" height="200" />
   <div class="mt-3">
-    <h5 class="">This looks like {{prediction}}</h5>
+    <h5 class="">This looks like {{predictions[0][0]}} - {{predictions[0][1]}}%</h5>
+    {% for t in text %}
+    <p>{{t}}</p>
+    {% endfor %}
     {% if predictions|length > 1 %}
     <p>I also have some other guesses</p>
     <ul>
-      {% for category,probability in predictions %}
-      {% if category != prediction %}
+      {% for category,probability in predictions[1:] %}
       <li>{{category}} : {{probability}}%</li>
-      {% endif %} {% endfor %}
+      {% endfor %}
     </ul>
     {% endif %}
     <hr />
@@ -26,6 +28,9 @@
         </span>
       </div>
     </div>
+  </div>
+  <div>
+    <a target="_blank" href="{{link}}">For more information, please visit this website</a>
   </div>
 </div>
 {% endif %}

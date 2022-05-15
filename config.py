@@ -28,14 +28,17 @@ class DevelopmentConfig(Config):
     This extends the `Config` base class to store variables
     for development environments
     """
+    HOST = '0.0.0.0'
     DEBUG = True
     FLASK_APP = 'APP-DEV'
     SECRET_KEY = os.getenv('SECRET_KEY')
     PORT = os.getenv('PORT', 8000)
     USE_MODEL = strtobool(os.getenv('USE_MODEL', 'True'))
-    MODEL_FILE = 'inception_resnetv2_garbage_4.h5'
+    MODEL_FILE = 'inceptionresnetv2_model_v5.h5'
+
     CATEGORIES = [
         'cardboard',
+        'e-waste',
         'glass',
         'metal',
         'paper',
