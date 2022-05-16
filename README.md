@@ -40,4 +40,4 @@ controllers/prediction_controller.py is where the majority of work is done for t
 
 The app is responsive and can be used on mobile devices comfortably
 
-<img src="screenshots/paper-prediction.png"/>
+<img src="screenshots/metal-prediction-mobile.png"/>
