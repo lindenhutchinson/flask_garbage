@@ -54,6 +54,9 @@ def make_prediction():
     file_path = app.config['UPLOAD_PATH'] + new_filename + file_ext
     uploaded_file.save(file_path)
 
+    # used to allow app to function without having a model connected
+    # this was very helpful during development
+    # hot reloading an app with a model loaded takes a significant amount of time
     prediction = 'toast'
     predictions = {'toast': 50, 'vegemite':75, 'butter':30}
 
