@@ -3,6 +3,3 @@
 .env
 venv
 __pycache__/
-static/uploads/**
-static/reported_images/good/**
-static/reported_images/bad/**
